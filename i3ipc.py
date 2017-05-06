@@ -1,3 +1,7 @@
+"""Wrapper around i3-msg for writing script to interact w/ i3wm.
+
+Docs on IPC interface here: http://i3wm.org/docs/ipc.html."""
+
 from __future__ import print_function
 import json
 import subprocess
