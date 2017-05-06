@@ -1,6 +1,8 @@
 """Wrapper around i3-msg for writing script to interact w/ i3wm.
 
-Docs on IPC interface here: http://i3wm.org/docs/ipc.html."""
+Docs on IPC interface here: http://i3wm.org/docs/ipc.html.
+
+"""
 
 from __future__ import print_function
 import json
@@ -19,7 +21,9 @@ def _i3msg(*args):
 
 def command(*cmd):
   """Sends a command via i3-msg."""
-  return _i3msg('-t', 'command', *cmd)
+  response = _i3msg('-t', 'command', *cmd)
+  print(response)
+  return response
 
 
 def get_workspaces():

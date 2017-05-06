@@ -2,9 +2,13 @@
 
 """Tool for addressing workspaces by index, not 'number'.
 
-Switches to i'th workspace on the currently focused screen."""
+Targets the i'th workspace on the currently focused screen. Can either view
+workspace, move focused container to workspace, or both.
+
+"""
 
 from __future__ import print_function, unicode_literals
+import argparse
 import sys
 
 import i3ipc as i3
@@ -19,13 +23,22 @@ def _ordinal_workspace(index):
 
 
 def _main():
-  if len(sys.argv) != 2:
-    raise ValueError('expected single argument: number indicating workspace to switch to')
-  index = int(sys.argv[1]) - 1
-  if index < 0:
-    raise ValueError('one-based index must be positive, got:', sys.argv[1])
+  parser = argparse.ArgumentParser()
+  parser.add_argument('action', choices=['view', 'move', 'moveview'])
+  parser.add_argument('number', type=int)
+  args = parser.parse_args()
+  if args.number < 1:
+    raise ValueError('one-based index must be positive, got:', args.number)
 
-  print(i3.command('workspace', _ordinal_workspace(index)))
+  target = _ordinal_workspace(args.number - 1)
+  if args.action == 'view':
+    i3.command('workspace', target)
+  elif args.action == 'move':
+    i3.command('move', 'container', 'workspace', target)
+  else:
+    assert args.action == 'moveview'
+    i3.command('move', 'container', 'workspace', target)
+    i3.command('workspace', target)
 
 
 if __name__ == '__main__':
