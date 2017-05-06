@@ -16,3 +16,8 @@ def _i3msg(*args):
 def command(*cmd):
   """Sends a command via i3-msg."""
   return _i3msg('-t', 'command', *cmd)
+
+
+def get_workspaces():
+  """Returns i3 workspaces."""
+  return _i3msg('-t', 'get_workspaces')
