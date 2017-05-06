@@ -31,6 +31,11 @@ def get_workspaces():
   return _i3msg('-t', 'get_workspaces')
 
 
+def get_tree():
+  """Returns i3 tree."""
+  return _i3msg('-t', 'get_tree')
+
+
 def focused_output_workspaces():
   """Returns workspaces on currently focused output."""
   workspaces = get_workspaces()
