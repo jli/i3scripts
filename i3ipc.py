@@ -40,3 +40,15 @@ def focused_output_workspaces():
       focused_output = ws['output']
       break
   return [ws for ws in workspaces if ws['output'] == focused_output]
+
+
+def move_window_and_or_view_workspace(action, workspace_name):
+  """Sends command to view or move window to (or both) a workspace."""
+  if action == 'view':
+    command('workspace', workspace_name)
+  elif action == 'move':
+    command('move', 'container', 'workspace', workspace_name)
+  else:
+    assert action == 'moveview'
+    command('move', 'container', 'workspace', workspace_name)
+    command('workspace', workspace_name)

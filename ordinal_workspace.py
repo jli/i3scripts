@@ -31,14 +31,7 @@ def _main():
     raise ValueError('one-based index must be positive, got:', args.number)
 
   target = _ordinal_workspace(args.number - 1)
-  if args.action == 'view':
-    i3.command('workspace', target)
-  elif args.action == 'move':
-    i3.command('move', 'container', 'workspace', target)
-  else:
-    assert args.action == 'moveview'
-    i3.command('move', 'container', 'workspace', target)
-    i3.command('workspace', target)
+  i3.move_window_and_or_view_workspace(args.action, target)
 
 
 if __name__ == '__main__':
