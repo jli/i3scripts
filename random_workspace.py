@@ -5,7 +5,6 @@
 from __future__ import print_function, unicode_literals
 import argparse
 import random
-import sys
 
 import i3ipc as i3
 

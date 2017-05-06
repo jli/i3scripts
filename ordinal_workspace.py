@@ -9,7 +9,6 @@ workspace, move focused container to workspace, or both.
 
 from __future__ import print_function, unicode_literals
 import argparse
-import sys
 
 import i3ipc as i3
 
