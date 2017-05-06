@@ -36,6 +36,15 @@ def get_tree():
   return _i3msg('-t', 'get_tree')
 
 
+def focused_workspace():
+  """Returns currently focused workspace."""
+  workspaces = get_workspaces()
+  for ws in workspaces:
+    if ws['focused']:
+      return ws
+  raise RuntimeError('no focused workspace?!', ws)
+
+
 def focused_output_workspaces():
   """Returns workspaces on currently focused output."""
   workspaces = get_workspaces()
