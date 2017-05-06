@@ -25,3 +25,14 @@ def command(*cmd):
 def get_workspaces():
   """Returns i3 workspaces."""
   return _i3msg('-t', 'get_workspaces')
+
+
+def focused_output_workspaces():
+  """Returns workspaces on currently focused output."""
+  workspaces = get_workspaces()
+  # There should always be exactly 1 focused workspace, I think?
+  for ws in workspaces:
+    if ws['focused']:
+      focused_output = ws['output']
+      break
+  return [ws for ws in workspaces if ws['output'] == focused_output]
