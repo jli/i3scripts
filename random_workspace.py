@@ -3,6 +3,7 @@
 """Switch to a randomly named new workspace."""
 
 from __future__ import print_function, unicode_literals
+import argparse
 import random
 import sys
 
@@ -19,17 +20,26 @@ WORDS = ['age', 'ale', 'ash', 'ate', 'bay', 'coo', 'cry', 'dad', 'den', 'die',
 
 
 def _random_name():
+  """Returns a new random name."""
   return '-'.join([random.choice(WORDS), random.choice(WORDS)])
 
 
-def _main():
+def _new_random_name():
+  """Returns a new random workspace name that doesn't already exist."""
   existing = frozenset(ws['name'] for ws in i3.get_workspaces())
   for _ in xrange(0, 1000):
     candidate = _random_name()
     if candidate not in existing:
-      print(i3.command('workspace', candidate))
-      return
-  print('failed to generate new, nonexistent random name?!', file=sys.stderr)
+      return candidate
+  raise RuntimeError('failed to generate new, nonexistent random name?!')
+
+def _main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument('action', choices=['view', 'move', 'moveview'])
+  args = parser.parse_args()
+
+  target = _new_random_name()
+  i3.move_window_and_or_view_workspace(args.action, target)
 
 
 if __name__ == '__main__':
