@@ -7,6 +7,7 @@ Handy to use as binding for Alt+Tab.
 
 from __future__ import print_function, unicode_literals
 import argparse
+import itertools
 
 import i3ipc as i3
 
@@ -17,6 +18,7 @@ def _type_from_enum(i):
 
 class _TreeNode(object):
   def __init__(self, i3tree):
+    self._id = i3tree['id']
     self._name = i3tree['name']
     self._type = _type_from_enum(i3tree['type'])
     self._layout = i3tree['layout']
@@ -24,10 +26,14 @@ class _TreeNode(object):
     self._focused = i3tree['focused']
     self._nodes = map(_TreeNode, i3tree['nodes'])
 
+  def __repr__(self):
+    return '<TreeNode {} {}>'.format(self._id, self._name)
+
   def _print(self, indent=0):
-    print('{}<{}> {} {}{}{}'.format(
+    print('{}<{}|{}> {} {}{}{}'.format(
         ' ' * indent * 2,
         self._name,
+        self._id,
         self._layout,
         self._type,
         ' WIN' if self._window else '',
@@ -46,6 +52,13 @@ class _TreeNode(object):
         return found
     return None
 
+  def _windows_dfs(self):
+    if self._window:
+      yield self
+    for n in self._nodes:
+      for w in n._windows_dfs():
+        yield w
+
 
 def _main():
   parser = argparse.ArgumentParser()
@@ -59,6 +72,21 @@ def _main():
 
   print('\nworkspace')
   tree._find_workspace(args.workspace)._print()
+
+  print('\nwindows')
+  wins = list(tree._find_workspace(args.workspace)._windows_dfs())
+  if args.dir == 'prev':
+    wins = list(reversed(wins))
+  print(wins)
+  wins = list(itertools.chain(wins, wins))  # buffered
+  win_pairs = itertools.izip(wins, wins[1:])
+
+  for (w1, w2) in win_pairs:
+    print('checking', w1._name, w2._name)
+    if w1._focused:
+      target = w2._id
+#      break
+  i3.command('[con_id={}]'.format(target), 'focus')
 
   #### TODO: figure out how to determine the right focus operation...
 
