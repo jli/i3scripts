@@ -4,7 +4,7 @@ Docs on IPC interface here: http://i3wm.org/docs/ipc.html.
 
 """
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 import json
 import subprocess
 import sys
