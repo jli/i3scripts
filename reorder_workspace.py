@@ -20,11 +20,27 @@ def _swap_name_numbers(ws1, ws2):
   return new_ws1_name, new_ws2_name
 
 
+def _add_number_to_workspace(workspace, all_workspaces):
+  """Adds a number prefix to the workspace name."""
+  max_num = max(ws['num'] for ws in all_workspaces)
+  # Don't think I technically need to specific current name, because it should
+  # be focused.
+  i3.command('rename', 'workspace', workspace['name'], 'to',
+             '{}:{}'.format(max_num + 1, workspace['name']))
+
+
 def _reorder_workspaces(prev, debug=False):
   """Reorders adjacent workspaces by renaming and swapping their numbers."""
   all_ws = i3.focused_output_workspaces()
+
+  focused = i3.focused_workspace(all_ws)
+  if focused['num'] == -1:
+    _add_number_to_workspace(focused, all_ws)
+    return
+
   numbered_ws = [ws for ws in all_ws if ws['num'] != -1]
   if debug: print('numbered workspaces:', numbered_ws)
+  # Add buffer for wrapping.
   ws = list(itertools.chain([numbered_ws[-1]], numbered_ws, [numbered_ws[0]]))
   if prev:
     ws = list(reversed(ws))
@@ -40,8 +56,7 @@ def _reorder_workspaces(prev, debug=False):
       i3.command('rename', 'workspace', ws2['name'], 'to', new_ws2_name)
       break
   else:
-    # TODO: do something in this case?
-    print('failure. maybe focused window wasnt numbered?')
+    raise RuntimeError("this shouldn't happen")
 
 
 def _main():

@@ -34,9 +34,10 @@ def get_workspaces():
   return _i3msg('-t', 'get_workspaces')
 
 
-def focused_workspace():
+def focused_workspace(workspaces=None):
   """Returns currently focused workspace."""
-  workspaces = get_workspaces()
+  if workspaces is None:
+    workspaces = get_workspaces()
   for ws in workspaces:
     if ws['focused']:
       return ws
