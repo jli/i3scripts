@@ -9,6 +9,9 @@ import json
 import subprocess
 import sys
 
+import i3tree
+
+
 def _i3msg(*args):
   """Wrapper around i3-msg. Calls i3-msg w/ all args and parses response."""
   popen = subprocess.Popen(['i3-msg'] + list(args), stdout=subprocess.PIPE,
@@ -33,7 +36,7 @@ def get_workspaces():
 
 def get_tree():
   """Returns i3 tree."""
-  return _i3msg('-t', 'get_tree')
+  return i3tree.TreeNode(_i3msg('-t', 'get_tree'))
 
 
 def focused_workspace():
