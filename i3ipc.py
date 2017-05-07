@@ -34,11 +34,6 @@ def get_workspaces():
   return _i3msg('-t', 'get_workspaces')
 
 
-def get_tree():
-  """Returns i3 tree."""
-  return i3tree.TreeNode(_i3msg('-t', 'get_tree'))
-
-
 def focused_workspace():
   """Returns currently focused workspace."""
   workspaces = get_workspaces()
@@ -57,6 +52,17 @@ def focused_output_workspaces():
       focused_output = ws['output']
       break
   return [ws for ws in workspaces if ws['output'] == focused_output]
+
+
+def get_tree():
+  """Returns i3 tree."""
+  return i3tree.TreeNode(_i3msg('-t', 'get_tree'))
+
+
+def get_workspace_tree():
+  """Returns i3 tree of currently focused workspace."""
+  full_tree = i3tree.TreeNode(_i3msg('-t', 'get_tree'))
+  return full_tree.find_workspace(focused_workspace()['name'])
 
 
 def move_window_and_or_view_workspace(action, workspace_name):

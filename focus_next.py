@@ -16,9 +16,8 @@ def _focus_next(prev):
   """Focuses the next (or previous) window in the current workspace.
   Window ordering is pre-order depth-first traversal of the container tree.
   """
-  tree = i3.get_tree()
-  current_workspace_tree = tree.find_workspace(i3.focused_workspace()['name'])
-  wins = list(current_workspace_tree.windows_dfs())
+  tree = i3.get_workspace_tree()
+  wins = list(tree.windows_dfs())
   if prev:
     wins = list(reversed(wins))
   # Add boundary windows to either end so that focus wraps around.
