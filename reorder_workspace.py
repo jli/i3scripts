@@ -23,10 +23,13 @@ def _swap_name_numbers(ws1, ws2):
 def _add_number_to_workspace(workspace, all_workspaces):
   """Adds a number prefix to the workspace name."""
   max_num = max(ws['num'] for ws in all_workspaces)
+  # If there are no numbered workspaces, max_num will be -1. This ensures we
+  # start at 1.
+  target_num = max(1, max_num + 1)
   # Don't think I technically need to specific current name, because it should
   # be focused.
   i3.command('rename', 'workspace', workspace['name'], 'to',
-             '{}:{}'.format(max_num + 1, workspace['name']))
+             '{}:{}'.format(target_num, workspace['name']))
 
 
 def _reorder_workspaces(prev, debug=False):
