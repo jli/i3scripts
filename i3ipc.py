@@ -55,6 +55,12 @@ def focused_output_workspaces():
   return [ws for ws in workspaces if ws['output'] == focused_output]
 
 
+def max_workspace_number(workspaces):
+  """Returns largest workspace number. None if no spaces are numbered."""
+  used_numbers = [ws['num'] for ws in workspaces if ws['num'] != -1]
+  return max(used_numbers) if used_numbers else None
+
+
 def get_tree():
   """Returns i3 tree."""
   return i3tree.TreeNode(_i3msg('-t', 'get_tree'))
