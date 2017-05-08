@@ -9,8 +9,7 @@ import random
 import i3ipc as i3
 
 # Random list of short words.
-# grep '^[a-z]\+$' /usr/share/dict/american-english \
-# | grep -v '....' | grep -v '^..$' | grep -v '^.$' | shuf -n50 | sort
+# egrep '^[a-z]{3}$' /usr/share/dict/words | shuf -n50 | sort
 WORDS = ['age', 'ale', 'ash', 'ate', 'bay', 'coo', 'cry', 'dad', 'den', 'die',
          'dis', 'ebb', 'fly', 'foe', 'fop', 'gut', 'had', 'hep', 'hie', 'his',
          'jet', 'lax', 'lox', 'maw', 'mes', 'mew', 'mid', 'mom', 'mug', 'net',
@@ -31,6 +30,7 @@ def _new_random_name():
     if candidate not in existing:
       return candidate
   raise RuntimeError('failed to generate new, nonexistent random name?!')
+
 
 def _main():
   parser = argparse.ArgumentParser()

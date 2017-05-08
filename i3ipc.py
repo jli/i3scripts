@@ -1,7 +1,6 @@
-"""Wrapper around i3-msg for writing script to interact w/ i3wm.
+"""Wrapper around i3-msg for writing scripts to interact w/ i3wm.
 
 Docs on IPC interface here: http://i3wm.org/docs/ipc.html.
-
 """
 
 from __future__ import print_function, unicode_literals
@@ -44,9 +43,10 @@ def focused_workspace(workspaces=None):
   raise RuntimeError('no focused workspace?!', ws)
 
 
-def focused_output_workspaces():
+def focused_output_workspaces(workspaces=None):
   """Returns workspaces on currently focused output."""
-  workspaces = get_workspaces()
+  if workspaces is None:
+    workspaces = get_workspaces()
   # There should always be exactly 1 focused workspace, I think?
   for ws in workspaces:
     if ws['focused']:
