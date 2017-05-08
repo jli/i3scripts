@@ -22,9 +22,10 @@ def _random_name():
   return '-'.join([random.choice(WORDS), random.choice(WORDS)])
 
 
-def _new_random_name():
+def new_random_name(existing=None):
   """Returns a new random workspace name that doesn't already exist."""
-  existing = frozenset(ws['name'] for ws in i3.get_workspaces())
+  if existing is None:
+    existing = frozenset(ws['name'] for ws in i3.get_workspaces())
   for _ in xrange(0, 1000):
     candidate = _random_name()
     if candidate not in existing:
@@ -37,7 +38,7 @@ def _main():
   parser.add_argument('action', choices=['view', 'move', 'moveview'])
   args = parser.parse_args()
 
-  target = _new_random_name()
+  target = new_random_name()
   i3.move_window_and_or_view_workspace(args.action, target)
 
 
